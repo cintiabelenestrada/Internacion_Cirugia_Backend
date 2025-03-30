@@ -9,12 +9,25 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const pacinteRoutes = require('./routes/pacienteRoutes');
 const medicoRoutes = require('./routes/medicoRoutes');
 const camaRoutes = require('./routes/camaRoutes');
+const rateLimit = require('express-rate-limit');
 
 
 // Conexión a la base de datos
 connectDB();
 
+// Configurar el rate limiter
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100, // Límite de 100 solicitudes por IP
+    message: 'Demasiadas solicitudes desde esta IP, por favor intente nuevamente después de 15 minutos.',
+});
 const app = express();
+
+
+// Aplicar el rate limiter a todas las solicitudes
+app.use(limiter);
+
+
 // Set up CORS
 app.use(cors({
     origin: true, // "true" will copy the domain of the request back
@@ -31,7 +44,7 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 // Rutas
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api',roleRoutes);
 app.use('/api',serviceRoutes);
 app.use('/api',pacinteRoutes);

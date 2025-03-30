@@ -59,7 +59,7 @@ Este proyecto es una API backend desarrollada con Node.js y MongoDB para gestion
 
 ## Contribuciones
 
-Es la primera version del sistema , sujeta a cabios y actulizaciones de requisitos con base de datos no relacional.
+Es la primera version del sistema , sujeta a cambios y actualizaciones de requisitos con base de datos no relacional.
 Cada integrante crear su propia rama para trabajar.
 ¡Las contribuciones son bienvenidas! Por favor, abre un issue o envía un pull request.
 
