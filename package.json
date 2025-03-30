@@ -1,5 +1,5 @@
 {
-  "name": "backend_auth_su",
+  "name": "internacion_cirugia_backend",
   "version": "1.0.0",
   "description": " Api RESTful para gestion de internacion de pacientes en el Hopspital Pablo Soria, Argentina. El sistema permite gestionar la internacion de pacientes, incluyendo la creacion de usuarios, autenticacion y autorizacion, gestion de camas ys eguimiento de evolucion.",
   "keywords": [
