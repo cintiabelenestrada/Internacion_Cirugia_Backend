@@ -60,8 +60,6 @@ var camaController = {
             res.status(500).json({ message: 'Error deleting cama', error });
         }
     }
-
-
 }
 
 module.exports = camaController;
