@@ -8,10 +8,6 @@ const MedicoSchema = new Schema({
     unique: true,
     trim: true
   }, // valor unico prestar atencion error si se carga 2 registros con el mismo cuil
-  titulo: String,
-  matricula: String,
-  servicio: String,
-  funcion: String
 },
 );
 

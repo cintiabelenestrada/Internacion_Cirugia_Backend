@@ -2,16 +2,15 @@ const { Schema, model } = require('mongoose');
 
 const camaSchema = new Schema({
     numero: { type: String, required: true, unique: true },
-    sala: { type: String, required: true },
-    piso: { type: Number, required: true },
-    especialidad: {
-        type: String,
-        required: true,
-        enum: ['UCI', 'Pediatría', 'Cirugía', 'Maternidad', 'General']
+    sala: { 
+        type: String, 
+        required: true, 
+        enum: ['UTI', 'SALA 6', 'SALA 7', 'PROVISORIOS']
     },
+    piso: { type: Number, required: true },
     estado: {
         type: String,
-        enum: ['disponible', 'ocupada', 'mantenimiento', 'reservada'],
+        enum: ['disponible', 'ocupada', 'en mantenimiento'],
         default: 'disponible'
     },
     paciente: {
