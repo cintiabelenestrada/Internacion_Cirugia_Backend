@@ -10,7 +10,7 @@ const medicoRoutes = require('./routes/medicoRoutes');
 const camaRoutes = require('./routes/camaRoutes');
 const rateLimit = require('express-rate-limit');
 const unless = require('express-unless');
-
+const userRoutes = require('./routes/userRoutes');
 
 // Conexión a la base de datos
 connectDB();
@@ -26,15 +26,22 @@ const generalLimiter = rateLimit({
     max: 1000, // Máximo 1000 solicitudes por IP
     message: 'Demasiadas solicitudes desde esta IP, por favor intente nuevamente después de 15 minutos.',
 });
-generalLimiter.unless = unless;
+
+// Middleware personalizado para excluir rutas específicas
+const applyGeneralLimiter = (req, res, next) => {
+    if (req.path === '/api/auth/login') {
+        return next(); // Excluir esta ruta del limitador
+    }
+    generalLimiter(req, res, next); // Aplicar el limitador a otras rutas
+};
 
 const app = express();
 
 // Aplicar el rate limiter solo a la ruta de login
 app.use('/api/auth/login', loginLimiter);
 
-// Aplicar el rate limiter general a todas las rutas excepto el login
-app.use(generalLimiter.unless({ path: ['/api/auth/login'] }));
+// Aplicar el middleware personalizado
+app.use(applyGeneralLimiter);
 
 // Set up CORS
 app.use(cors({
@@ -58,6 +65,7 @@ app.use('/api', roleRoutes);
 app.use('/api', pacienteRoutes);
 app.use('/api', medicoRoutes);
 app.use('/api', camaRoutes);
+app.use('/api', userRoutes);
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 5000;

@@ -1,5 +1,5 @@
 const Paciente = require('../models/Paciente');
-var pacienteController = {
+const pacienteController = {
 
     getAll: async (req, res) => {
         try {
