@@ -24,6 +24,21 @@ var camaController = {
         }
     },
 
+    // Get patient assigned to a specific cama
+    getPacientePorCama: async (req, res) => {
+        try {
+            const cama = await Cama.findOne({ numero: req.params.numero })
+                .populate('paciente') // Populate patient details
+                .populate('medico'); // Populate doctor details
+            if (!cama) {
+                return res.status(404).json({ message: 'Cama not found' });
+            }
+            res.status(200).json(cama);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching cama details', error });
+        }
+    },
+
     // Create a new cama
     createCama: async (req, res) => {
         try {

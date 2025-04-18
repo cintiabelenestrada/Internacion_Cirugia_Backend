@@ -20,6 +20,7 @@ var pacienteController = {
             res.status(500).json({ message: err.message });
         }
     },
+    
     getOne: async (req, res) => {
         try {
             const item = await Paciente.findById(req.params.id);
@@ -31,6 +32,21 @@ var pacienteController = {
             res.status(500).json({ message: err.message });
         }
     },
+
+    getPacientePorDNI: async (req, res) => {
+        try {
+            const paciente = await Paciente.findOne({ dni: req.params.dni })
+                .populate('cama') // Populate cama details
+                .populate('medico'); // Populate doctor details
+            if (!paciente) {
+                return res.status(404).json({ message: 'Paciente not found' });
+            }
+            res.status(200).json(paciente);
+        } catch (error) {
+            res.status(500).json({ message: 'Error fetching paciente', error });
+        }
+    },
+
     save: async (req, res) => {
         try {
             const item = new Paciente(req.body);
@@ -65,44 +81,25 @@ var pacienteController = {
             res.status(500).json({ message: err.message });
         }
     },
-    getByDni: async (req, res) => {
-        try {
-            const dni = parseInt(req.params.dni);
-            if (isNaN(dni)) {
-                return res.status(400).json({ message: 'Invalid DNI format' });
-            }
 
-            const item = await Paciente.findOne({ dni: dni });
-            if (!item) {
+    // Update patient's diagnosis and observations
+    actualizarDiagnosticoYObservaciones: async (req, res) => {
+        try {
+            const { diagnosticos, observaciones } = req.body;
+            const paciente = await Paciente.findByIdAndUpdate(
+                req.params.id,
+                { $set: { diagnosticos, observaciones } },
+                { new: true }
+            );
+            if (!paciente) {
                 return res.status(404).json({ message: 'Paciente not found' });
             }
-
-            res.json(item);
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-    },
-
-    searchDni: async (req, res) => {
-        try {
-            const { dni } = req.query;
-            const patients = await Paciente.find({ dni: new RegExp(`^${dni}`, 'i') }).limit(100);
-            res.json(patients);
+            res.status(200).json(paciente);
         } catch (error) {
-            res.status(500).send(error);
+            res.status(500).json({ message: 'Error updating paciente', error });
         }
-    }
-    ,
-    search: async (req, res) => {
-        const searchTerm =
-            req.query.q || 'No search term provided';
-        res.send(`Search Term: ${searchTerm}`);
     }
 }
-
-
-
-
 
 
 module.exports = pacienteController;
