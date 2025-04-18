@@ -6,27 +6,36 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
-const pacinteRoutes = require('./routes/pacienteRoutes');
+const pacienteRoutes = require('./routes/pacienteRoutes');
 const medicoRoutes = require('./routes/medicoRoutes');
 const camaRoutes = require('./routes/camaRoutes');
 const rateLimit = require('express-rate-limit');
+const unless = require('express-unless');
 
 
 // Conexión a la base de datos
 connectDB();
 
-// Configurar el rate limiter
-const limiter = rateLimit({
+const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100, // Límite de 100 solicitudes por IP
+    max: 15, // Máximo 15 intentos de inicio de sesión por IP
+    message: 'Demasiados intentos de inicio de sesión, por favor intente nuevamente después de 15 minutos.',
+});
+
+const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 1000, // Máximo 1000 solicitudes por IP
     message: 'Demasiadas solicitudes desde esta IP, por favor intente nuevamente después de 15 minutos.',
 });
+generalLimiter.unless = unless;
+
 const app = express();
 
+// Aplicar el rate limiter solo a la ruta de login
+app.use('/api/auth/login', loginLimiter);
 
-// Aplicar el rate limiter a todas las solicitudes
-app.use(limiter);
-
+// Aplicar el rate limiter general a todas las rutas excepto el login
+app.use(generalLimiter.unless({ path: ['/api/auth/login'] }));
 
 // Set up CORS
 app.use(cors({
@@ -43,14 +52,14 @@ app.use(cors({
                                            // pre-flight OPTIONS requests
 }));
 app.use(bodyParser.json());
+
 // Rutas
 app.use('/api/auth', authRoutes);
-app.use('/api',roleRoutes);
-app.use('/api',serviceRoutes);
-app.use('/api',pacinteRoutes);
+app.use('/api', roleRoutes);
+app.use('/api', serviceRoutes);
+app.use('/api', pacienteRoutes);
 app.use('/api', medicoRoutes);
-app.use('/api',camaRoutes);
-
+app.use('/api', camaRoutes);
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 5000;
