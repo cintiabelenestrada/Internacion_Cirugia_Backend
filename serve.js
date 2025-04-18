@@ -5,7 +5,6 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const roleRoutes = require('./routes/roleRoutes');
-const serviceRoutes = require('./routes/serviceRoutes');
 const pacienteRoutes = require('./routes/pacienteRoutes');
 const medicoRoutes = require('./routes/medicoRoutes');
 const camaRoutes = require('./routes/camaRoutes');
@@ -56,7 +55,6 @@ app.use(bodyParser.json());
 // Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api', roleRoutes);
-app.use('/api', serviceRoutes);
 app.use('/api', pacienteRoutes);
 app.use('/api', medicoRoutes);
 app.use('/api', camaRoutes);

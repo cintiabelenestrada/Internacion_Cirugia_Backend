@@ -1,27 +1,14 @@
 const express = require('express');
 const pacienteController = require('../controllers/pacienteController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Ruta para obtener todos los pacientes
-router.get('/pacientes', pacienteController.getAll);
-
-// Ruta para obtener un paciente por ID
-router.get('/paciente/:id', pacienteController.getOne);
-
-// Ruta para obtener un paciente por DNI
-router.get('/paciente/dni/:dni', pacienteController.getPacientePorDNI);
-
-// Ruta para crear un nuevo paciente
-router.post('/paciente', pacienteController.save);
-
-// Ruta para actualizar un paciente por ID
-router.put('/paciente/:id', pacienteController.update);
-
-// Ruta para actualizar diagnósticos y observaciones de un paciente
-router.put('/paciente/:id/diagnosticos', pacienteController.actualizarDiagnosticoYObservaciones);
-
-// Ruta para eliminar un paciente por ID
-router.delete('/paciente/:id', pacienteController.delete);
+// Proteger las rutas con el middleware
+router.get('/pacientes', authMiddleware, pacienteController.getAll);
+router.get('/paciente/:id', authMiddleware, pacienteController.getOne);
+router.post('/paciente', authMiddleware, pacienteController.save);
+router.put('/paciente/:id', authMiddleware, pacienteController.update);
+router.delete('/paciente/:id', authMiddleware, pacienteController.delete);
 
 module.exports = router;

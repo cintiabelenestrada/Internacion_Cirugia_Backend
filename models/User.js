@@ -12,10 +12,6 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false, // Set default value to true or false as per your requirement
     },
-    service: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Service', // Referencing the Service model
-    },
     role: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role', // Referencing the Role model
