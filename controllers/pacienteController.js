@@ -153,26 +153,23 @@ const pacienteController = {
 
     createPaciente: async (req, res) => {
         try {
-            const { nombreSala, numeroCama, nombreMedico, ...pacienteData } = req.body;
+            const { nombreSala, numeroCama, nombreMedico, apellidoMedico, ...pacienteData } = req.body;
 
             // Buscar la sala por nombre
             const sala = await Sala.findOne({ nombre: nombreSala });
             if (!sala) {
-                console.error('Sala no encontrada:', nombreSala);
                 return res.status(404).json({ message: 'Sala no encontrada' });
             }
 
             // Buscar la cama por número y sala
             const cama = await Cama.findOne({ numero: numeroCama, sala: sala._id, estado: 'disponible' });
             if (!cama) {
-                console.error('Cama no encontrada o no disponible:', numeroCama, sala._id);
                 return res.status(400).json({ message: 'La cama no está disponible o no pertenece a esta sala' });
             }
 
-            // Buscar el médico por nombre
-            const medico = await Medico.findOne({ nombre: nombreMedico });
+            // Buscar el médico por nombre y apellido
+            const medico = await Medico.findOne({ nombre: nombreMedico, apellido: apellidoMedico });
             if (!medico) {
-                console.error('Médico no encontrado:', nombreMedico);
                 return res.status(404).json({ message: 'Médico no encontrado' });
             }
 
@@ -183,8 +180,6 @@ const pacienteController = {
                 cama: cama._id,
                 medico: medico._id
             });
-
-            console.log('Paciente a guardar:', nuevoPaciente);
 
             await nuevoPaciente.save();
 

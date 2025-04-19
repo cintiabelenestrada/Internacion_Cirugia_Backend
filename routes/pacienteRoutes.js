@@ -6,7 +6,7 @@ const router = express.Router();
 // Rutas para la gestión de pacientes (sin protección)
 router.get('/pacientes', pacienteController.getAll); // Listar todos los pacientes
 router.get('/paciente/:id', pacienteController.getOne); // Obtener un paciente por ID
-router.post('/paciente', pacienteController.save); // Crear un nuevo paciente
+router.post('/paciente', pacienteController.createPaciente); // Crear un nuevo paciente
 router.put('/paciente/:id', pacienteController.update); // Actualizar un paciente por ID
 router.delete('/paciente/:id', pacienteController.delete); // Eliminar un paciente por ID
 
