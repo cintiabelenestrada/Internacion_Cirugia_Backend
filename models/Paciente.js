@@ -19,9 +19,10 @@ const PacienteSchema = new Schema({
     type: Number,
     required: true // Edad es obligatoria
   },
-  fecha_nac: {
+  fecha_ingreso: {
     type: Date,
-    required: true // Fecha de nacimiento es obligatoria
+    required: true, // Fecha de ingreso es obligatoria
+    default: Date.now // Por defecto, la fecha actual
   },
   sexo: {
     type: String,
@@ -42,12 +43,19 @@ const PacienteSchema = new Schema({
     type: String,
     default: '' // Observaciones opcionales
   },
+
   cama: {
     type: Schema.Types.ObjectId,
     ref: 'Cama', // Relación con el modelo Cama
     default: null
   },
-  
+    
+  sala: {
+    type: Schema.Types.ObjectId,
+    ref: 'Sala', // Relación con el modelo Sala
+    required: true // La sala es obligatoria
+  },
+
   medico: {
     type: Schema.Types.ObjectId,
     ref: 'Medico', // Relación con el modelo Medico
