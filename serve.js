@@ -11,6 +11,7 @@ const camaRoutes = require('./routes/camaRoutes');
 const rateLimit = require('express-rate-limit');
 const unless = require('express-unless');
 const userRoutes = require('./routes/userRoutes');
+const salaRoutes = require('./routes/salaRoutes');
 
 // Conexión a la base de datos
 connectDB();
@@ -66,6 +67,7 @@ app.use('/api', pacienteRoutes);
 app.use('/api', medicoRoutes);
 app.use('/api', camaRoutes);
 app.use('/api', userRoutes);
+app.use('/api', salaRoutes); // Agregar las rutas de salas
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 5000;
